@@ -19,7 +19,10 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=cattle
 
-  ha-proxy:
-    build: inf/ha-proxy
-    ports:
-      - "8081:80"
+  fpm:
+    build: ha-manager
+    container_name: ha-manager
+    volumes:
+      - ./ha-manager:/ha-manager/
+      - ~/data/ssh:/root/.ssh
+      - ~/.composer:/root/.composer
