@@ -1,0 +1,65 @@
+version: '2'
+services:
+  fpm:
+    image: registry.letsbonus.net:5000/marketplace_api/fpm:v0.101.0
+    logging:
+      driver: syslog
+      options:
+        syslog-address: udp://logs4.papertrailapp.com:39803
+        tag: uid={{.ID}};container={{.Name}};image={{.ImageName}};
+    links:
+    - mysql:mysql
+    - redis:redis
+  nginx:
+    image: registry.letsbonus.net:5000/marketplace_api/nginx:v0.101.0
+    logging:
+      driver: syslog
+      options:
+        syslog-address: udp://logs4.papertrailapp.com:39803
+        tag: uid={{.ID}};container={{.Name}};image={{.ImageName}};
+    links:
+    - fpm:fpm
+    ports:
+    - 61283:80/tcp
+    labels:
+      com.letsbonus.healthcheck: '{"url":"/ping","mail-from":"docker-alerts@letsbonus.com","mail-to":"docker-alerts@letsbonus.com"}'
+      com.letsbonus.subdomains: '{"HTTP-LB-IN":["marketplace.staging.letsbonus.net",
+        "marketplace-ext.staging.letsbonus.net"],"HTTPS-LB-IN":["marketplace.staging.letsbonus.net",
+        "marketplace-ext.staging.letsbonus.net"]}'
+  mysql:
+    image: rancher/external-service
+  redis:
+    image: rancher/external-service
+
+
+version: '2'
+services:
+  fpm:
+    scale: 3
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      port: 9000
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+  nginx:
+    scale: 3
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      port: 80
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      strategy: recreate
+      request_line: GET /ping HTTP/1.0
+  mysql:
+    external_ips:
+    - 172.26.10.196
+    start_on_create: true
+  redis:
+    external_ips:
+    - 172.26.10.196:6379
+    start_on_create: true

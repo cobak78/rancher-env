@@ -1,0 +1,25 @@
+version: '2'
+services:
+  master:
+    image: rancher/server
+    ports:
+      - "8080:8080"
+    depends_on:
+        - mysql
+    environment:
+      - db-host=mysql
+      - db-port=3306
+      - db-user=root
+      - db-pass=root
+      - db-name=cattle
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=cattle
+
+  ha-proxy:
+    build: inf/ha-proxy
+    ports:
+      - "8081:80"
