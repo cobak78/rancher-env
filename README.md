@@ -77,3 +77,17 @@ And now, you can see host in Rancher Page.
 	1.2 Keep the generated tokens.
 
 	1.3 In our project, open _ha-manager/config/test.yml_ file and replace keys with provided one.
+
+2. Now we have to create the phar executable.
+
+	2.1 Execute _docker exec ha-manager composer install_
+
+	2.2 $ _docker exec "ha-manager" php -d phar.readonly=off vendor/bin/phar-composer build_
+
+	2.3 $ _docker exec "ha-manager" php ha-manager.phar test_
+
+	2.4 Replace configuration file inf/ha-proxy/haproxy.cfg with the generated haproxy-test.cfg.new file, with _cp ha-manager/haproxy-test.cfg.new inf/ha-proxy/haproxy.cfg_
+
+3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d.
+
+4. Navigate to your 8081 port to see ha-proxy in action with your deployed project.

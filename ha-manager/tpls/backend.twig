@@ -1,0 +1,18 @@
+backend {{ name }}
+  mode http
+  option forwardfor
+{% if health_check is not empty %}
+  option httpchk GET {{ health_check }}
+{% endif %}
+{% if mail_from is not empty or mail_to is not empty %}
+  email-alert mailers mail-server
+{% endif %}
+{% if mail_from is not empty %}
+  email-alert from {{ mail_from }}
+{% endif %}
+{% if mail_to is not empty %}
+  email-alert to {{ mail_to }}
+{% endif %}
+{% for server in servers %}
+  server {{ server.name }} {{ server.host }} check port {{ server.port }} inter 5s rise 1 fall 2 id {{ loop.index }}
+{% endfor %}

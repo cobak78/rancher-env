@@ -1,0 +1,24 @@
+manager_url: http://192.168.99.100:8080/v2-beta/projects/1a1/stacks/
+credentials: token:secret
+is_rancher: true
+haproxy_ip: 192.168.99.100:13579
+mailer_ip: 127.0.0.1:25
+title: Staging Test Load Balancer
+global: |
+  stats socket /run/haproxy/admin-test.sock mode 660 level admin
+  stats timeout 30s
+
+frontend:
+  - name: HTTP-LB-IN
+    ip: 192.168.99.100:8082
+    cert:
+    backends: []
+
+  - name: HTTPS-LB-IN
+    ip: 192.168.99.100:443
+    cert: /etc/haproxy/ssl/pem/staging-test.letsbonus.net.pem
+    backends: []
+
+backend: []
+
+store_path: /haproxy-test.cfg.new
