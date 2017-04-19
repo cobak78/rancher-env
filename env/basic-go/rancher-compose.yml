@@ -1,7 +1,7 @@
 go:
   upgrade_strategy:
     start_first: true
-  scale: 1
+  scale: 2
   health_check:
     port: 8083
     interval: 2000

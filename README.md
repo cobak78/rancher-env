@@ -2,36 +2,40 @@
 
 Letsbonus rancher environment replication.
 
+## Linux user
+
+You must install docker-machine and virtualBox in order to follow this workshop
+
+$ curl -L https://github.com/docker/machine/releases/download/v0.10.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
+  chmod +x /tmp/docker-machine &&
+  sudo cp /tmp/docker-machine /usr/local/bin/docker-machine
+
+$ sudo apt-get install virtualBox
 
 ## Rancher environment
-
-Check your docker machine version:
-
-```
-$ docker-machine --version
-docker-machine version 0.8.2, build e18a919
-```
 
 1. Create a rancher master with a connection to mysql database.
 
 ```
-# You can execute this on your primary docker-machine 
+# You can execute this on your primary docker-machine (linux user do this on your localhost as usual) 
 $ docker-compose up -d
 
 ```
 
 2. You can acces now your rancher master on http://{docker-machine ip default}:8080
 
-3. Create three new docker-machines to run our hosts
+3. Create two new docker-machines to run our hosts
 
 ```
-$ docker-machine create -d virtualbox rancher-host-1
-$ docker-machine create -d virtualbox rancher-host-2
+$ docker-machine create rancher-host-1
+$ docker-machine create rancher-host-2
 ```
 
 4. On Rancher navigate to Infrastructure > Hosts, press "Add host" button:
 
 	4.1 First time rancher will ask you to save the master ip, just press _Save_.
+
+	4.1.x Linux user must use the host subnet ip here. try with 10.0.2.2 or use iptables to see it.
 
 	4.2 Copy the docker run command showed here, you will need it in section 5.
 
@@ -64,24 +68,12 @@ And now, you can see host in Rancher Page.
 
 ## Ha-proxy our deployed project
 
-1. Lets create an API connection in Rancher:
+1. Copy the ip and port generated for the deployed app.
 
-	1.1 Navigate to API > Keys and press _Add account API Key_ button.
+2. Change it on the ha-proxy > haproxy.cfg file
 
-	1.2 Keep the generated tokens.
-
-	1.3 In our project, open _ha-manager/config/test.yml_ file and replace keys with provided one.
-
-2. Now we have to create the phar executable.
-
-	2.1 Execute _docker exec ha-manager composer install_
-
-	2.2 $ _docker exec "ha-manager" php -d phar.readonly=off vendor/bin/phar-composer build_
-
-	2.3 $ _docker exec "ha-manager" php ha-manager.phar test_
-
-	2.4 Replace configuration file inf/ha-proxy/haproxy.cfg with the generated haproxy-test.cfg.new file, with _cp ha-manager/haproxy-test.cfg.new inf/ha-proxy/haproxy.cfg_
-
-3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d.
+3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d --build.
 
 4. Navigate to your 8081 port to see ha-proxy in action with your deployed project.
+
+4. You can also view your ha-proxy in http://192.168.99.100:1936/haproxy_stats with admin:admin login.
