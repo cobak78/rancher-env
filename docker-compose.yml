@@ -18,11 +18,3 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=cattle
-
-  fpm:
-    build: ha-manager
-    container_name: ha-manager
-    volumes:
-      - ./ha-manager:/ha-manager/
-      - ~/data/ssh:/root/.ssh
-      - ~/.composer:/root/.composer

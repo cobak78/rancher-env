@@ -1,6 +1,7 @@
 version: '2'
 services:
   haproxy:
-    image: inf/ha-proxy
+    build: inf/ha-proxy
     ports:
       - "8081:80"
+      - "1936:1936"

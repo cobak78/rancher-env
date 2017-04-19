@@ -1,0 +1,9 @@
+version: '2'
+services:
+  go:
+    image: cobak/go-hello
+    labels:
+      com.healthcheck: '{"url":"/ping"}'
+      com.subdomains: '{"HTTP-LB-IN":["go-hello.workshop.net"]}'
+    ports:
+      - 8083

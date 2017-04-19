@@ -1,0 +1,12 @@
+go:
+  upgrade_strategy:
+    start_first: true
+  scale: 1
+  health_check:
+    port: 8083
+    interval: 2000
+    initializing_timeout: 60000
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+    strategy: recreate
+    request_line: GET /ping HTTP/1.0
