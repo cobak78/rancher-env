@@ -7,3 +7,4 @@ services:
       com.subdomains: '{"HTTP-LB-IN":["go-hello.workshop.net"]}'
     ports:
       - 8083
+      

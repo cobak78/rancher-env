@@ -10,3 +10,4 @@ go:
     healthy_threshold: 2
     strategy: recreate
     request_line: GET /ping HTTP/1.0
+    

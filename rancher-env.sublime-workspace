@@ -12,30 +12,37 @@
 	"buffers":
 	[
 		{
-			"file": ".gitignore",
+			"file": "inf/ha-proxy/haproxy.cfg",
 			"settings":
 			{
-				"buffer_size": 19,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "# Rancher Workshop\n\nLetsbonus rancher environment replication.\n\n\n## Rancher environment\n\nCheck your docker machine version:\n\n```\n$ docker-machine --version\ndocker-machine version 0.8.2, build e18a919\n```\n\n1. Create a rancher master with a connection to mysql database.\n\n```\n# You can execute this on your primary docker-machine \n$ docker-compose up -d\n\n```\n\n2. You can acces now your rancher master on http://{docker-machine ip default}:8080\n\n3. Create three new docker-machines to run our hosts\n\n```\n$ docker-machine create -d virtualbox rancher-host-1\n$ docker-machine create -d virtualbox rancher-host-2\n```\n\n4. On Rancher navigate to Infrastructure > Hosts, press \"Add host\" button:\n\n\t4.1 First time rancher will ask you to save the master ip, just press _Save_.\n\n\t4.2 Copy the docker run command showed here, you will need it in section 5.\n\n\n5. Access via ssh to your hosts and run copied Rancher host command.\n\n```\n# Check IP, it's will use at next step\n$ docker-machine ip rancher-host-1\n\n# SSH and run agent command such as: sudo docker run -d ...\n$ docker-machine ssh rancher-host-1\n$ sudo docker run -d --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.2.0 http://192.168.99.100:8080/v1/scripts/8EAF52490FDB555ACC54:1483142400000:2uTActl1J2JUVn9OHptZ6qy0U\n```\n\n6. Repeat on every host.\n\nAnd now, you can see host in Rancher Page.\n\n\n\n## Deploy a project\n\n1. Navigate to Stacks > User page and push _Add stack_ button\n\n2. Paste docker-compose.yml & rancher-compose.yml file provided in env/sepa directory.\n\n3. Create it.\n\n\n## Ha-proxy our deployed project\n\n1. Lets create an API connection in Rancher:\n\n\t1.1 Navigate to API > Keys and press _Add account API Key_ button.\n\n\t1.2 Keep the generated tokens.\n\n\t1.3 In our project, open _ha-manager/config/test.yml_ file and replace keys with provided one.\n\n2. Now we have to create the phar executable.\n\n\t2.1 Execute _docker exec ha-manager composer install_\n\n\t2.2 $ _docker exec \"ha-manager\" php -d phar.readonly=off vendor/bin/phar-composer build_\n\n\t2.3 $ _docker exec \"ha-manager\" php ha-manager.phar test_\n\n\t2.4 Replace configuration file inf/ha-proxy/haproxy.cfg with the generated haproxy-test.cfg.new file, with _cp ha-manager/haproxy-test.cfg.new inf/ha-proxy/haproxy.cfg_\n\n3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d.\n\n4. Navigate to your 8081 port to see ha-proxy in action with your deployed project.",
-			"file": "README.md",
-			"file_size": 2366,
-			"file_write_time": 131369842930000000,
-			"settings":
-			{
-				"buffer_size": 2470,
+				"buffer_size": 1100,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "docker-compose.yml",
+			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 528,
+				"buffer_size": 2406,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "docker-compose-haproxy.yml",
+			"settings":
+			{
+				"buffer_size": 106,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "env/basic-go/rancher-compose.yml",
+			"settings":
+			{
+				"buffer_size": 250,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -74,25 +81,26 @@
 	[
 		"/Users/jaime.merino/dev/rancher-env",
 		"/Users/jaime.merino/dev/rancher-env/env",
-		"/Users/jaime.merino/dev/rancher-env/env/sepa",
-		"/Users/jaime.merino/dev/rancher-env/ha-manager",
-		"/Users/jaime.merino/dev/rancher-env/ha-manager/config",
-		"/Users/jaime.merino/dev/rancher-env/ha-manager/tpls",
+		"/Users/jaime.merino/dev/rancher-env/env/basic-go",
 		"/Users/jaime.merino/dev/rancher-env/inf",
 		"/Users/jaime.merino/dev/rancher-env/inf/ha-proxy"
 	],
 	"file_history":
 	[
-		"/Users/jaime.merino/dev/rancher-env/docker-compose-haproxy.yml",
-		"/Users/jaime.merino/dev/rancher-env/.gitignore",
 		"/Users/jaime.merino/dev/rancher-env/inf/ha-proxy/haproxy.cfg",
 		"/Users/jaime.merino/dev/rancher-env/docker-compose.yml",
+		"/Users/jaime.merino/dev/rancher-env/inf/ha-proxy/Dockerfile",
+		"/Users/jaime.merino/dev/rancher-env/docker-compose-haproxy.yml",
 		"/Users/jaime.merino/dev/rancher-env/README.md",
+		"/Users/jaime.merino/dev/rancher-env/env/basic-go/rancher-compose.yml",
+		"/Users/jaime.merino/dev/rancher-env/env/basic-go/docker-compose.yml",
+		"/Users/jaime.merino/dev/rancher-env/.gitignore",
+		"/Users/jaime.merino/dev/rancher-env/ha-manager/Dockerfile",
+		"/Users/jaime.merino/dev/rancher-env/ha-manager/command.php",
 		"/Users/jaime.merino/dev/rancher-env/ha-manager/config/test.yml",
+		"/Users/jaime.merino/dev/rancher-env/ha-manager/tpls/layout.twig",
 		"/Users/jaime.merino/dev/rancher-env/env/marketplace-api/rancher-compose.yml",
 		"/Users/jaime.merino/dev/rancher-env/env/marketplace-api/docker-compose.yml",
-		"/Users/jaime.merino/dev/rancher-env/ha-manager/command.php",
-		"/Users/jaime.merino/dev/rancher-env/inf/ha-proxy/Dockerfile",
 		"/Users/jaime.merino/dev/rancher-env/ha-manager/config/pci.yml",
 		"/Users/jaime.merino/dev/commands",
 		"/Users/jaime.merino/dev/catalog-api/vendor/gedmo/doctrine-extensions/tests/Gedmo/Sortable/Fixture/Item.php",
@@ -132,35 +140,37 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": ".gitignore",
+					"file": "inf/ha-proxy/haproxy.cfg",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19,
+						"buffer_size": 1100,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1100,
+								1100
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -169,15 +179,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2470,
+						"buffer_size": 2406,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								553,
-								503
+								1032,
+								1032
 							]
 						],
 						"settings":
@@ -193,19 +203,47 @@
 				},
 				{
 					"buffer": 2,
-					"file": "docker-compose.yml",
+					"file": "docker-compose-haproxy.yml",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 528,
+						"buffer_size": 106,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								106,
+								106
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "env/basic-go/rancher-compose.yml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 250,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								250,
+								250
 							]
 						],
 						"settings":
@@ -218,7 +256,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]

@@ -27,8 +27,8 @@ $ docker-compose up -d
 3. Create two new docker-machines to run our hosts
 
 ```
-$ docker-machine create rancher-host-1
-$ docker-machine create rancher-host-2
+$ docker-machine create -d virtualbox rancher-host-1
+$ docker-machine create -d virtualbox rancher-host-2
 ```
 
 4. On Rancher navigate to Infrastructure > Hosts, press "Add host" button:
@@ -72,7 +72,7 @@ And now, you can see host in Rancher Page.
 
 2. Change it on the ha-proxy > haproxy.cfg file
 
-3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d --build.
+3. Get up ha-proxy container with $ _docker-compose -f docker-compose-haproxy.yml up -d --build_.
 
 4. Navigate to your 8081 port to see ha-proxy in action with your deployed project.
 
